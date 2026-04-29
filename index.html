@@ -4,6 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The Best Moves Are Made By You | Berkshire Hathaway HomeServices Professional Realty</title>
+  <!-- Chalk Digital Global Site Tag - OH301 -->
+  <script>
+    window.ca_id = 'CA-381756-175';
+  </script>
+  <script src='https://cdn.chalkdigital.com/scripts/cdtag.min.js'></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <style>
@@ -57,7 +62,7 @@
       mask-image:
         linear-gradient(to left, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.45) 35%, transparent 68%),
         linear-gradient(to top, transparent 0%, black 10%);
-      -webkit-mask-composite: destination-in;
+      -webkit-mask-composite: source-in;
       mask-composite: intersect;
     }
     /* Content LEFT side */
@@ -370,6 +375,17 @@
     .footer-logo img { height: 26px; display: block; mix-blend-mode: screen; opacity: 0.65; }
     .footer-copy { font-size: 0.62rem; color: rgba(255,255,255,0.28); }
 
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.75s ease, transform 0.75s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
     /* ── ANIMATIONS ── */
     @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
     .hero-eyebrow  { animation: fadeUp 0.6s ease 0.1s both; }
@@ -389,9 +405,10 @@
       .services-grid { grid-template-columns: 1fr 1fr; }
     }
     @media (max-width: 780px) {
+      .hero-content { padding: 3.5rem 2rem; max-width: 100%; }
+      .hero::before { font-size: 5rem; bottom: -1rem; }
       .stats-grid { grid-template-columns: 1fr; }
       .form-row { grid-template-columns: 1fr; }
-      .hero-content { padding: 3.5rem 2rem; max-width: 100%; }
 
       footer { flex-direction: column; text-align: center; }
     }
@@ -411,6 +428,8 @@
 
 <!-- HERO -->
 <section class="hero">
+  <div class="hero-draw-line"></div>
+
   <div class="hero-content">
     <p class="hero-eyebrow">A confidential conversation worth having</p>
     <h1 class="hero-headline">
@@ -431,11 +450,16 @@
       ></iframe>
     </div>
   </div>
+
+  <div class="scroll-indicator" onclick="document.querySelector('.numbers').scrollIntoView({behavior:'smooth'})">
+    <span>Explore</span>
+    <div class="scroll-chevron"></div>
+  </div>
 </section>
 
 <!-- NUMBERS -->
 <section class="numbers">
-  <div class="numbers-header">
+  <div class="numbers-header reveal">
     <span class="section-eyebrow">The record</span>
     <h2 class="numbers-headline">We're not asking you to take our word for it.</h2>
     <p class="numbers-sub">These aren't goals. This is last year.</p>
@@ -454,7 +478,7 @@
       <div class="stat-label">In Real Estate<br>Sold in 2025</div>
     </div>
   </div>
-  <div class="footprint-strip">
+  <div class="footprint-strip reveal">
     <div class="fp-block">
       <div class="fp-number">39</div>
       <div class="fp-label">Offices</div>
@@ -484,12 +508,12 @@
 <!-- SERVICES -->
 <section class="services-section">
   <div class="services-inner">
-    <div class="services-header">
+    <div class="services-header reveal">
       <span class="section-eyebrow">Full service. Every opportunity.</span>
       <h2 class="services-headline">Full service, more opportunities.</h2>
       <p class="services-intro">Real estate is a network of relationships and opportunities that grow together. Every service we offer is another seed, another source of business to cultivate.</p>
     </div>
-    <div class="services-grid" id="services-grid">
+    <div class="services-grid reveal" id="services-grid">
       <div class="service-card">
         <div class="service-name">Residential Sales</div>
         <div class="service-desc">The foundation. Done at a level that ranks us #21 in the entire Berkshire Hathaway HomeServices network.</div>
@@ -522,7 +546,7 @@
 </section>
 
 <!-- PHILOSOPHY -->
-<section class="philosophy">
+<section class="philosophy reveal">
   <div class="philosophy-inner">
     <div class="philosophy-left">
       <span class="section-eyebrow">Our philosophy</span>
@@ -536,7 +560,7 @@
 
 <!-- DIFFERENTIATOR -->
 <section class="differentiator">
-  <div class="differentiator-inner">
+  <div class="differentiator-inner reveal">
     <div class="diff-left">
       <span class="section-eyebrow light">Why agents stay</span>
       <h2 class="diff-headline">Most brokerages will tell you their leadership has an open door policy.<br><em>Ours never needed one.</em></h2>
@@ -554,7 +578,7 @@
 
 <!-- CLOSING -->
 <section class="closing">
-  <div class="closing-inner">
+  <div class="closing-inner reveal">
     <span class="section-eyebrow">Make your move</span>
     <h2 class="closing-headline">Ready to see if it's the right move?</h2>
     <p class="closing-sub">Your inquiry is completely confidential. We'll reach out on your terms, at a time that works for you.</p>
@@ -581,6 +605,20 @@
 </footer>
 
 <script>
+  // ── Section scroll reveal ──
+  var revealObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal').forEach(function(el) {
+    revealObserver.observe(el);
+  });
+
   // ── Service cards: staggered fade-in on scroll ──
   if ('IntersectionObserver' in window) {
     const cardObserver = new IntersectionObserver((entries) => {
@@ -603,11 +641,20 @@
   // Forms handled by Jotform embeds
 
   // Auto-resize iframes based on Jotform postMessage
+  // Also fires Chalk Digital conversion event on form submission
   window.addEventListener('message', function(e) {
     if (typeof e.data === 'object' && e.data.action === 'setHeight') {
       var iframes = document.querySelectorAll('iframe[id^="jotform"]');
       iframes.forEach(function(iframe) {
         iframe.style.height = (e.data.height + 32) + 'px';
+      });
+    }
+    // Chalk Digital conversion event on Jotform submission
+    if (typeof e.data === 'string' && e.data.includes('submission-completed')) {
+      window.cdtag = window.cdtag || [];
+      window.cdtag.push({
+        'event': 'conversion',
+        'value': 'jotform_submission_260994918100056'
       });
     }
   });
